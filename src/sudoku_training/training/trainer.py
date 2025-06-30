@@ -136,4 +136,3 @@ class Trainer:
                         click.echo(f"Transferred weights for layer {i}: {layer.name}")
                 except Exception as e:
                     click.echo(f"Could not transfer weights for layer {i}: {layer.name} - {e}")
-
