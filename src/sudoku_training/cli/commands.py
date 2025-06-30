@@ -7,12 +7,13 @@ from pathlib import Path
 import click
 
 from sudoku_training.config import TrainingConfig
+from sudoku_training.models.converter import convert_keras_model_to_onnx
 from sudoku_training.training.pipeline import TrainingPipeline
 
 
 @click.group()
 def cli() -> None:
-    """Sudoku Digit Recognition Training Pipeline"""
+    """Sudoku Digit Recognition Training Pipeline."""
 
 
 @cli.command()
@@ -24,10 +25,15 @@ def cli() -> None:
 @click.option("--epochs", default=100, help="Number of epochs for Sudoku training")
 @click.option("--learning-rate", default=0.001, help="Learning rate for training from scratch")
 def train(
-    data_dir, pretrained_model, use_mnist_pretraining, output_dir, batch_size, epochs, learning_rate
+    data_dir,
+    pretrained_model,
+    use_mnist_pretraining,
+    output_dir,
+    batch_size,
+    epochs,
+    learning_rate,
 ) -> None:
-    """Train the Sudoku digit recognition model"""
-
+    """Trains the Sudoku digit recognition model."""
     # Create output directory
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
@@ -58,8 +64,7 @@ def train(
 @click.option("--output-dir", default=".", help="Output directory for MNIST model")
 @click.option("--epochs", default=50, help="Number of epochs for MNIST training")
 def train_mnist(output_dir: str, epochs: int) -> None:
-    """Train only on MNIST dataset"""
-
+    """Trains only on MNIST dataset."""
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     config = TrainingConfig(mnist_epochs=epochs)
@@ -75,8 +80,7 @@ def train_mnist(output_dir: str, epochs: int) -> None:
 @click.option("--model-path", required=True, help="Path to trained model")
 @click.option("--data-dir", required=True, help="Path to test dataset")
 def evaluate(model_path: str, data_dir: str) -> None:
-    """Evaluate a trained model"""
-
+    """Evaluates a trained model."""
     config = TrainingConfig()
     pipeline = TrainingPipeline(config)
 
@@ -90,6 +94,25 @@ def evaluate(model_path: str, data_dir: str) -> None:
     except FileNotFoundError as e:
         click.echo(f"Error: {e}")
         return
+
+
+@cli.command()
+@click.option("--model-path", required=True, help="Path to Keras model")
+@click.option("--output-path", default=".", help="Output directory for ONNX model")
+@click.option("--output-name", default=None, help="Optional name for the output ONNX model")
+def convert(model_path: str, output_path: str, output_name: str = None) -> None:
+    """Converts a Keras model to ONNX format."""
+    model = Path(model_path)
+    output_dir = Path(output_path)
+
+    if not output_dir.exists():
+        output_dir.mkdir(parents=True)
+
+    convert_keras_model_to_onnx(model, output_dir, output_name)
+
+    click.echo(
+        f"Model converted to ONNX format and saved to: {output_dir / (output_name or model.stem + '.onnx')}"
+    )
 
 
 if __name__ == "__main__":
