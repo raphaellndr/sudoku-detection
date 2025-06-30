@@ -64,3 +64,8 @@ sudoku-train train-mnist --output-dir ./models --epochs 50
 #### Evaluate a Model
 ```bash
 sudoku-train evaluate --model-path ./
+```
+
+#### Convert a Model
+```bash
+sudoku-train convert --model-path ./
