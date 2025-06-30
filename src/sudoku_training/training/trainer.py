@@ -137,5 +137,3 @@ class Trainer:
                 except Exception as e:
                     click.echo(f"Could not transfer weights for layer {i}: {layer.name} - {e}")
 
-
-__all__ = ["Trainer"]
