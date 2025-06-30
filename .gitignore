@@ -163,6 +163,6 @@ cython_debug/
 .DS_Store
 
 # Data folders
-data/
+sample_sudokus/
 datasets/
-models/
+trained_models/
