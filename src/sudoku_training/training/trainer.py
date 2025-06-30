@@ -15,7 +15,7 @@ from sudoku_training.models.builder import ModelBuilder
 class Trainer:
     """Handles model training logic"""
 
-    def __init__(self, config: TrainingConfig, model_builder: ModelBuilder):
+    def __init__(self, config: TrainingConfig, model_builder: ModelBuilder) -> None:
         self.config = config
         self.model_builder = model_builder
 

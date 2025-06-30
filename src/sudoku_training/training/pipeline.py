@@ -17,7 +17,7 @@ from .trainer import Trainer
 class TrainingPipeline:
     """Main training pipeline orchestrator"""
 
-    def __init__(self, config: TrainingConfig):
+    def __init__(self, config: TrainingConfig) -> None:
         self.config = config
         self.model_builder = ModelBuilder(config)
         self.data_loader = DataLoader(config)
